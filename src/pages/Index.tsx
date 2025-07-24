@@ -170,7 +170,7 @@ const Index = () => {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="text-center lg:text-left">
               <h1 
-                className="text-5xl md:text-6xl font-montserrat font-bold text-foreground mb-6 leading-tight animate-fade-in"
+                className="md:text-6xl font-montserrat font-bold text-foreground mb-6 leading-tight animate-fade-in text-4xl"
                 data-animate
                 id="hero-title"
               >
