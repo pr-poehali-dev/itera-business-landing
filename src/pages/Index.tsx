@@ -113,18 +113,7 @@ const Index = () => {
     }
   ];
 
-  const testimonials = [
-    {
-      text: 'ITERA BUSINESS помогла нам кардинально изменить подход к работе с данными. Внедренная система аналитики позволила принимать более обоснованные решения.',
-      author: 'Алексей Петров',
-      position: 'CTO, TechCorp'
-    },
-    {
-      text: 'Команда показала глубокое понимание наших бизнес-процессов и предложила решения, которые реально работают в production.',
-      author: 'Мария Сидорова',
-      position: 'Директор по развитию, InnovateLab'
-    }
-  ];
+
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -138,21 +127,21 @@ const Index = () => {
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <img 
-              src="https://cdn.poehali.dev/files/b973a592-1fed-466d-9c42-5b3d5331bb58.jpg" 
+              src="https://cdn.poehali.dev/files/ib1.jpg" 
               alt="ITERA BUSINESS Logo" 
-              className="w-12 h-12 object-contain"
+              className="w-12 h-12 object-contain hover:scale-110 transition-transform duration-300"
             />
             <div className="font-montserrat font-bold text-xl text-primary">
               ITERA <span className="text-foreground">BUSINESS</span>
             </div>
           </div>
           <nav className="hidden md:flex items-center space-x-8">
-            <a href="#services" className="text-muted-foreground hover:text-primary transition-colors">Услуги</a>
-            <a href="#benefits" className="text-muted-foreground hover:text-primary transition-colors">О нас</a>
-            <a href="#cases" className="text-muted-foreground hover:text-primary transition-colors">Кейсы</a>
-            <a href="#contact" className="text-muted-foreground hover:text-primary transition-colors">Контакты</a>
+            <a href="#services" className="text-muted-foreground hover:text-primary transition-all duration-300 hover:scale-105 relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-primary after:transition-all after:duration-300 hover:after:w-full">Услуги</a>
+            <a href="#benefits" className="text-muted-foreground hover:text-primary transition-all duration-300 hover:scale-105 relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-primary after:transition-all after:duration-300 hover:after:w-full">О нас</a>
+            <a href="#cases" className="text-muted-foreground hover:text-primary transition-all duration-300 hover:scale-105 relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-primary after:transition-all after:duration-300 hover:after:w-full">Кейсы</a>
+            <a href="#contact" className="text-muted-foreground hover:text-primary transition-all duration-300 hover:scale-105 relative after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-primary after:transition-all after:duration-300 hover:after:w-full">Контакты</a>
           </nav>
-          <Button className="font-medium">
+          <Button className="font-medium hover:scale-105 hover:shadow-lg transition-all duration-300">
             Консультация
           </Button>
         </div>
@@ -192,12 +181,12 @@ const Index = () => {
                 id="hero-buttons"
                 style={{animationDelay: '0.4s'}}
               >
-                <Button size="lg" className="px-8 py-3 text-lg font-medium hover:scale-105 transition-transform">
-                  <Icon name="MessageCircle" size={20} />
+                <Button size="lg" className="group px-8 py-3 text-lg font-medium hover:scale-105 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                  <Icon name="MessageCircle" size={20} className="group-hover:scale-110 transition-transform duration-300" />
                   Получить консультацию
                 </Button>
-                <Button variant="outline" size="lg" className="px-8 py-3 text-lg hover:scale-105 transition-transform">
-                  <Icon name="Play" size={20} />
+                <Button variant="outline" size="lg" className="group px-8 py-3 text-lg hover:scale-105 hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+                  <Icon name="Play" size={20} className="group-hover:scale-110 transition-transform duration-300" />
                   Смотреть кейсы
                 </Button>
               </div>
@@ -355,40 +344,7 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Testimonials Section */}
-      <section className="py-20 bg-muted/30">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-montserrat font-bold text-foreground mb-4">
-              Отзывы клиентов
-            </h2>
-          </div>
-          
-          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            {testimonials.map((testimonial, index) => (
-              <Card key={index} className="border-0 shadow-lg">
-                <CardContent className="p-8">
-                  <div className="mb-6">
-                    <Icon name="Quote" size={24} className="text-primary mb-4" />
-                    <p className="text-muted-foreground italic">
-                      "{testimonial.text}"
-                    </p>
-                  </div>
-                  <div className="flex items-center">
-                    <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mr-4">
-                      <Icon name="User" size={20} className="text-primary" />
-                    </div>
-                    <div>
-                      <div className="font-semibold text-foreground">{testimonial.author}</div>
-                      <div className="text-sm text-muted-foreground">{testimonial.position}</div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
+
 
       {/* CTA Section */}
       <section id="contact" className="py-20 bg-primary text-white relative overflow-hidden">
@@ -472,8 +428,8 @@ const Index = () => {
                         className="min-h-[100px]"
                       />
                     </div>
-                    <Button type="submit" size="lg" className="w-full bg-accent hover:bg-accent/90 text-white">
-                      <Icon name="Send" size={20} />
+                    <Button type="submit" size="lg" className="group w-full bg-accent hover:bg-accent/90 text-white hover:scale-105 hover:shadow-lg transition-all duration-300">
+                      <Icon name="Send" size={20} className="group-hover:translate-x-1 transition-transform duration-300" />
                       Получить консультацию
                     </Button>
                   </form>
@@ -491,9 +447,9 @@ const Index = () => {
             <div>
               <div className="flex items-center space-x-3 mb-4">
                 <img 
-                  src="https://cdn.poehali.dev/files/f5f67257-97a8-461d-a6eb-87f0d1cb1ad1.jpg" 
+                  src="https://cdn.poehali.dev/files/ib1.jpg" 
                   alt="ITERA BUSINESS Logo" 
-                  className="w-10 h-10 object-contain"
+                  className="w-10 h-10 object-contain hover:scale-110 transition-transform duration-300"
                 />
                 <div className="font-montserrat font-bold text-lg">
                   ITERA BUSINESS
