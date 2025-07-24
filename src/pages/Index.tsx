@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -12,6 +12,39 @@ const Index = () => {
     email: '',
     message: ''
   });
+  
+  const [visibleElements, setVisibleElements] = useState<Set<string>>(new Set());
+  const observerRef = useRef<IntersectionObserver | null>(null);
+
+  useEffect(() => {
+    observerRef.current = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setVisibleElements((prev) => new Set([...prev, entry.target.id]));
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: '0px 0px -100px 0px' }
+    );
+
+    const elements = document.querySelectorAll('[data-animate]');
+    elements.forEach((el) => {
+      if (observerRef.current) {
+        observerRef.current.observe(el);
+      }
+    });
+
+    return () => {
+      if (observerRef.current) {
+        observerRef.current.disconnect();
+      }
+    };
+  }, []);
+
+  const getAnimationClass = (id: string, animation: string = 'fade-in') => {
+    return visibleElements.has(id) ? `animate-${animation}` : 'opacity-0';
+  };
 
   const services = [
     {
@@ -104,9 +137,11 @@ const Index = () => {
       <header className="border-b bg-white/95 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-xl">I</span>
-            </div>
+            <img 
+              src="https://cdn.poehali.dev/files/b973a592-1fed-466d-9c42-5b3d5331bb58.jpg" 
+              alt="ITERA BUSINESS Logo" 
+              className="w-12 h-12 object-contain"
+            />
             <div className="font-montserrat font-bold text-xl text-primary">
               ITERA <span className="text-foreground">BUSINESS</span>
             </div>
@@ -126,30 +161,60 @@ const Index = () => {
       {/* Hero Section */}
       <section className="relative py-20 bg-gradient-to-br from-primary/5 via-accent/5 to-primary/10 overflow-hidden">
         <div className="absolute inset-0">
-          <div className="absolute top-20 left-10 w-32 h-32 border-2 border-primary/20 rotate-45 rounded-lg"></div>
-          <div className="absolute top-40 right-20 w-20 h-20 border-2 border-accent/30 rotate-12 rounded-lg"></div>
-          <div className="absolute bottom-20 left-1/3 w-16 h-16 border-2 border-primary/25 -rotate-12 rounded-lg"></div>
+          <div className="absolute top-20 left-10 w-32 h-32 border-2 border-primary/20 rotate-45 rounded-lg animate-float"></div>
+          <div className="absolute top-40 right-20 w-20 h-20 border-2 border-accent/30 rotate-12 rounded-lg animate-float" style={{animationDelay: '1s'}}></div>
+          <div className="absolute bottom-20 left-1/3 w-16 h-16 border-2 border-primary/25 -rotate-12 rounded-lg animate-float" style={{animationDelay: '2s'}}></div>
         </div>
         
-        <div className="container mx-auto px-4 text-center relative z-10">
-          <div className="max-w-4xl mx-auto">
-            <h1 className="text-5xl md:text-6xl font-montserrat font-bold text-foreground mb-6 leading-tight">
-              Цифровая трансформация{' '}
-              <span className="text-primary">вашего бизнеса</span>
-            </h1>
-            <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-              Инновационные IT-решения для роста и эффективности. 
-              Автоматизируем процессы, внедряем AI и создаем корпоративные продукты.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <Button size="lg" className="px-8 py-3 text-lg font-medium">
-                <Icon name="MessageCircle" size={20} />
-                Получить консультацию
-              </Button>
-              <Button variant="outline" size="lg" className="px-8 py-3 text-lg">
-                <Icon name="Play" size={20} />
-                Смотреть кейсы
-              </Button>
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div className="text-center lg:text-left">
+              <h1 
+                className="text-5xl md:text-6xl font-montserrat font-bold text-foreground mb-6 leading-tight animate-fade-in"
+                data-animate
+                id="hero-title"
+              >
+                Цифровая трансформация{' '}
+                <span className="text-primary">вашего бизнеса</span>
+              </h1>
+              <p 
+                className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto lg:mx-0 animate-fade-in"
+                data-animate
+                id="hero-subtitle"
+                style={{animationDelay: '0.2s'}}
+              >
+                Инновационные IT-решения для роста и эффективности. 
+                Автоматизируем процессы, внедряем AI и создаем корпоративные продукты.
+              </p>
+              <div 
+                className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start items-center animate-fade-in"
+                data-animate
+                id="hero-buttons"
+                style={{animationDelay: '0.4s'}}
+              >
+                <Button size="lg" className="px-8 py-3 text-lg font-medium hover:scale-105 transition-transform">
+                  <Icon name="MessageCircle" size={20} />
+                  Получить консультацию
+                </Button>
+                <Button variant="outline" size="lg" className="px-8 py-3 text-lg hover:scale-105 transition-transform">
+                  <Icon name="Play" size={20} />
+                  Смотреть кейсы
+                </Button>
+              </div>
+            </div>
+            <div 
+              className="relative animate-fade-in-right"
+              data-animate
+              id="hero-image"
+              style={{animationDelay: '0.6s'}}
+            >
+              <img 
+                src="/img/b464a60c-062e-4d4d-aae3-edb8c9b31ae2.jpg"
+                alt="Digital Transformation Illustration"
+                className="w-full h-auto rounded-2xl shadow-2xl"
+              />
+              <div className="absolute -top-6 -right-6 w-24 h-24 bg-accent/20 rounded-full animate-pulse-glow"></div>
+              <div className="absolute -bottom-6 -left-6 w-16 h-16 bg-primary/20 rounded-full animate-pulse-glow" style={{animationDelay: '1s'}}></div>
             </div>
           </div>
         </div>
@@ -158,7 +223,11 @@ const Index = () => {
       {/* Services Section */}
       <section id="services" className="py-20 bg-background">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
+          <div 
+            className={`text-center mb-16 ${getAnimationClass('services-header')}`}
+            data-animate
+            id="services-header"
+          >
             <h2 className="text-4xl font-montserrat font-bold text-foreground mb-4">
               Что мы делаем
             </h2>
@@ -169,9 +238,15 @@ const Index = () => {
           
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {services.map((service, index) => (
-              <Card key={index} className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+              <Card 
+                key={index} 
+                className={`border-0 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 hover:scale-105 ${getAnimationClass(`service-${index}`, 'scale-in')}`}
+                data-animate
+                id={`service-${index}`}
+                style={{animationDelay: `${index * 0.1}s`}}
+              >
                 <CardHeader className="text-center pb-4">
-                  <div className="w-16 h-16 bg-primary/10 rounded-xl flex items-center justify-center mx-auto mb-4">
+                  <div className="w-16 h-16 bg-primary/10 rounded-xl flex items-center justify-center mx-auto mb-4 hover:bg-primary/20 transition-colors">
                     <Icon name={service.icon} size={32} className="text-primary" />
                   </div>
                   <CardTitle className="text-lg font-montserrat font-semibold">
@@ -190,9 +265,20 @@ const Index = () => {
       </section>
 
       {/* Benefits Section */}
-      <section id="benefits" className="py-20 bg-muted/30">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
+      <section id="benefits" className="py-20 bg-muted/30 relative overflow-hidden">
+        <div className="absolute right-0 top-1/4 w-1/3 h-96 opacity-20">
+          <img 
+            src="/img/40021810-a674-4766-8f03-dce3b36cfc75.jpg"
+            alt="Technology Automation"
+            className="w-full h-full object-cover rounded-l-3xl"
+          />
+        </div>
+        <div className="container mx-auto px-4 relative z-10">
+          <div 
+            className={`text-center mb-16 ${getAnimationClass('benefits-header')}`}
+            data-animate
+            id="benefits-header"
+          >
             <h2 className="text-4xl font-montserrat font-bold text-foreground mb-4">
               Почему мы
             </h2>
@@ -203,8 +289,14 @@ const Index = () => {
           
           <div className="grid md:grid-cols-2 gap-8">
             {benefits.map((benefit, index) => (
-              <div key={index} className="flex items-start space-x-4 p-6 bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
-                <div className="w-12 h-12 bg-accent/10 rounded-lg flex items-center justify-center flex-shrink-0">
+              <div 
+                key={index} 
+                className={`flex items-start space-x-4 p-6 bg-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1 ${getAnimationClass(`benefit-${index}`, 'fade-in-left')}`}
+                data-animate
+                id={`benefit-${index}`}
+                style={{animationDelay: `${index * 0.15}s`}}
+              >
+                <div className="w-12 h-12 bg-accent/10 rounded-lg flex items-center justify-center flex-shrink-0 hover:bg-accent/20 transition-colors">
                   <Icon name={benefit.icon} size={24} className="text-accent" />
                 </div>
                 <div>
@@ -299,10 +391,21 @@ const Index = () => {
       </section>
 
       {/* CTA Section */}
-      <section id="contact" className="py-20 bg-primary text-white">
-        <div className="container mx-auto px-4">
+      <section id="contact" className="py-20 bg-primary text-white relative overflow-hidden">
+        <div className="absolute left-0 top-1/4 w-1/3 h-96 opacity-10">
+          <img 
+            src="/img/ecd8da21-121e-43d0-8786-1987b69493b4.jpg"
+            alt="Team Collaboration"
+            className="w-full h-full object-cover rounded-r-3xl"
+          />
+        </div>
+        <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto">
-            <div className="text-center mb-12">
+            <div 
+              className={`text-center mb-12 ${getAnimationClass('cta-header')}`}
+              data-animate
+              id="cta-header"
+            >
               <h2 className="text-4xl font-montserrat font-bold mb-4">
                 Расскажите о вашем бизнесе — мы предложим решение
               </h2>
@@ -312,7 +415,12 @@ const Index = () => {
             </div>
             
             <div className="grid lg:grid-cols-2 gap-12 items-center">
-              <div>
+              <div 
+                className={`${getAnimationClass('cta-benefits', 'fade-in-left')}`}
+                data-animate
+                id="cta-benefits"
+                style={{animationDelay: '0.2s'}}
+              >
                 <h3 className="text-2xl font-montserrat font-semibold mb-6">
                   Начните трансформацию уже сегодня
                 </h3>
@@ -382,9 +490,11 @@ const Index = () => {
           <div className="grid md:grid-cols-4 gap-8">
             <div>
               <div className="flex items-center space-x-3 mb-4">
-                <div className="w-8 h-8 bg-accent rounded-lg flex items-center justify-center">
-                  <span className="text-white font-bold">I</span>
-                </div>
+                <img 
+                  src="https://cdn.poehali.dev/files/f5f67257-97a8-461d-a6eb-87f0d1cb1ad1.jpg" 
+                  alt="ITERA BUSINESS Logo" 
+                  className="w-10 h-10 object-contain"
+                />
                 <div className="font-montserrat font-bold text-lg">
                   ITERA BUSINESS
                 </div>
